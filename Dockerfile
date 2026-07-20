@@ -7,7 +7,7 @@ RUN npm install --no-audit --no-fund
 
 COPY frontend/ ./
 
-RUN npm run build -- --outDir /frontend/dist \
+RUN npm run build \
     && test -f /frontend/dist/index.html
 
 
