@@ -1,0 +1,14 @@
+services:
+  projects:
+    build:
+      context: .
+    image: local/projects-app:latest
+    ports:
+      - "${APP_PORT:-8080}:8000"
+    volumes:
+      - projects_data:/data
+    restart: unless-stopped
+
+volumes:
+  projects_data:
+    name: projects_app_data
