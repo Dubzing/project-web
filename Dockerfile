@@ -1,11 +1,15 @@
 FROM node:24-alpine AS frontend-build
 
 WORKDIR /frontend
-COPY frontend/package.json ./
+
+COPY frontend/package*.json ./
 RUN npm install --no-audit --no-fund
 
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci --no-audit --no-fund
+COPY frontend/ ./
+
+RUN npm run build -- --outDir /frontend/dist \
+    && test -f /frontend/dist/index.html
+
 
 FROM python:3.11-slim
 
@@ -20,7 +24,7 @@ COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/server.py ./server.py
-COPY --from=frontend-build /frontend/dist ./static
+COPY --from=frontend-build /frontend/dist/ /app/static/
 
 RUN useradd --create-home --uid 10001 appuser \
     && mkdir -p /data \
