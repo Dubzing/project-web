@@ -7,14 +7,8 @@ services:
       - "${APP_PORT:-8080}:8000"
     volumes:
       - projects_data:/data
-    networks:
-      macvlan_101002:
-        ipv4_address: 10.100.2.10
     restart: unless-stopped
 
 volumes:
   projects_data:
     name: projects_app_data
-networks:
-  macvlan_101002:
-    external: true
